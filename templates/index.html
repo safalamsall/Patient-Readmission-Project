@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Readmission Prediction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #predictionResult {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <form id="predictionForm" accept-charset="UTF-8" action="/predict" method="post">
+        <h2>Patient Readmission Prediction</h2>
+        <hr>
+        <h3>Enter Patient Details</h3>
+        <!-- Dynamically generated input fields from the dataset -->
+        <div class="input-group"><label for="encounter_id">Encounter ID:</label><input type="number" id="encounter_id" name="encounter_id" required></div>
+        <div class="input-group"><label for="gender">Gender:</label><select id="gender" name="gender" required><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        <div class="input-group"><label for="age">Age:</label><input type="number" id="age" name="age" required></div>
+        <div class="input-group"><label for="admission_type_id">Admission Type ID:</label><input type="number" id="admission_type_id" name="admission_type_id" required></div>
+        <div class="input-group"><label for="discharge_disposition_id">Discharge Disposition ID:</label><input type="number" id="discharge_disposition_id" name="discharge_disposition_id" required></div>
+        <div class="input-group"><label for="num_procedures">Number of Procedures:</label><input type="number" id="num_procedures" name="num_procedures" required></div>
+        <div class="input-group"><label for="num_medications">Number of Medications:</label><input type="number" id="num_medications" name="num_medications" required></div>
+        <div class="input-group"><label for="number_outpatient">Number of Outpatient Visits:</label><input type="number" id="number_outpatient" name="number_outpatient" required></div>
+        <div class="input-group"><label for="number_emergency">Number of Emergency Visits:</label><input type="number" id="number_emergency" name="number_emergency" required></div>
+        <div class="input-group"><label for="number_inpatient">Number of Inpatient Visits:</label><input type="number" id="number_inpatient" name="number_inpatient" required></div>
+        <div class="input-group"><label for="diag_2">Secondary Diagnosis:</label><input type="text" id="diag_2" name="diag_2" required></div>
+        <div class="input-group"><label for="nateglinide">Nateglinide:</label>
+            <select id="nateglinide" name="nateglinide" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="pioglitazone">Pioglitazone:</label>
+            <select id="pioglitazone" name="pioglitazone" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="rosiglitazone">Rosiglitazone:</label>
+            <select id="rosiglitazone" name="rosiglitazone" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="acarbose">Acarbose:</label>
+            <select id="acarbose" name="acarbose" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="miglitol">Miglitol:</label>
+            <select id="miglitol" name="miglitol" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="troglitazone">Troglitazone:</label>
+            <select id="troglitazone" name="troglitazone" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="tolazamide">Tolazamide:</label>
+            <select id="tolazamide" name="tolazamide" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="examide">Examide:</label>
+            <select id="examide" name="examide" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="citoglipton">Citoglipton:</label>
+            <select id="citoglipton" name="citoglipton" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="glyburide-metformin">Glyburide-Metformin:</label>
+            <select id="glyburide-metformin" name="glyburide-metformin" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="input-group"><label for="metformin-rosiglitazone">Metformin-Rosiglitazone:</label>
+            <select id="metformin-rosiglitazone" name="metformin-rosiglitazone" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <button type="submit">Predict</button>
+        <div id="predictionResult">
+            <!-- Prediction result will be displayed here -->
+
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            console.log('Checking 1')
+            var formData = new FormData(this);
+            var jsonObject = {};
+            formData.forEach((value, key) => { jsonObject[key] = value; });
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonObject)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.prediction) {
+                    document.getElementById('predictionResult').innerHTML = `<p>The prediction (Readmission) from model is <b>${data.prediction}</b></p>`;
+                } else {
+                    document.getElementById('predictionResult').innerHTML = `<p>Error: ${data.message}</p>`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
