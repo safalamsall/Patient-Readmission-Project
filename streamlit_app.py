@@ -4,7 +4,7 @@ import requests
 # Function to handle API prediction
 def get_prediction(data):
     try:
-        response = requests.post('http://127.0.0.1:5000/predict', json=data)
+        response = requests.post('app.py', json=data)
         response.raise_for_status()  # Raise an error for bad status codes
         return response.json()
     except requests.exceptions.RequestException as e:
