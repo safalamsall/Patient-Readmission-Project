@@ -4,7 +4,7 @@ import requests
 # Function to handle API prediction
 def get_prediction(data):
     try:
-        response = requests.post('/predict', json=data)
+        response = requests.post('https://patient-readmission.streamlit.app/predict', json=data)
         response.raise_for_status()  # Raise an error for bad status codes
         return response.json()
     except requests.exceptions.RequestException as e:
